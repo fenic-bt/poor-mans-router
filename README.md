@@ -1,15 +1,17 @@
 # 🪓 Poor Man's Router - 穷鬼智能模型路由
 
 > 专为初学者和小用量用户设计的免费AI模型路由
+> 
+> 参考：唐斩AI编程系列指南
 
 [English](README_EN.md) | 中文
 
 ## ✨ 功能特点
 
-- 🎯 **智能选择** - 根据任务类型自动选择最优免费模型
-- 💰 **免费优先** - 专门聚合每日免费额度模型
-- 📊 **额度监控** - 追踪使用量，用完自动切换
-- 🔄 **自动切换** - 额度用完自动切到下一个最优模型
+- 🎯 **智能选择** - 根据任务类型自动选择最优模型
+- 💰 **性价比优先** - DeepSeek V3.2性价比最高
+- 📊 **额度监控** - 追踪使用量，额度用完自动切换
+- 🔄 **免费优先** - Groq每日1440次免费额度
 - 🌐 **无需代理** - 大部分模型不需要代理
 
 ## 🚀 快速开始
@@ -30,31 +32,40 @@ print(result['suggestion'])
 
 ## 📦 支持的模型
 
-### 文本模型 (每日免费额度)
+### 性价比之选 ⭐⭐⭐
 
-| 模型 | 提供商 | 每日额度 | 无代理 |
-|------|--------|---------|--------|
-| Llama 3.3 70B | Groq | 1440次/天 | ✅ |
-| Mixtral 8x7B | Groq | 1440次/天 | ✅ |
-| Gemma 2 9B | Groq | 1440次/天 | ✅ |
-| Command R+ | Cohere | 1000次/月 | ✅ |
-| Gemini Pro | Google | 60 RPM | ✅ |
+| 模型 | 提供商 | 类型 | 说明 |
+|------|--------|------|------|
+| **DeepSeek V3.2** | DeepSeek | 按量付费 | 性价比最高，没有之一 |
+| **GLM-4.7** | 智谱AI | CodingPlan | 编程能力强，数理逻辑好 |
+| **Kimi K2.5** | Kimi | CodingPlan | 便宜够用，官方支持 |
+| **MiniMax 2.1** | MiniMax | CodingPlan | 能力强，老牌推荐 |
 
-### 图像模型
+### 免费额度 ⭐⭐
 
-| 模型 | 提供商 | 每日额度 | 无代理 |
-|------|--------|---------|--------|
-| Flux Dev | Fal | 100次/天 | ✅ |
-| Imagen 3 | Google | 50次/天 | ✅ |
+| 模型 | 提供商 | 每日额度 | 需要代理 |
+|------|--------|---------|---------|
+| Llama 3.3 70B | Groq | 1440次/天 | ❌ |
+| Mixtral 8x7B | Groq | 1440次/天 | ❌ |
+| Gemma 2 9B | Groq | 1440次/天 | ❌ |
+| NVIDIA NIM | NVIDIA | 无限(限速40rpm) | ❌ |
+| OpenCode Zen | OpenCode | 有免费额度 | ❌ |
+| Command R+ | Cohere | 1000次/月 | ❌ |
+| Gemini Pro | Google | 60 RPM | ❌ |
 
-### 视频模型
+### 聚合平台
 
-| 模型 | 提供商 | 免费额度 | 无代理 |
-|------|--------|---------|--------|
-| Gen-3 Alpha | Runway | 125 credits | ✅ |
-| Pika 1.0 | Pika | 150 credits | ✅ |
+| 平台 | 特点 |
+|------|------|
+| **OpenRouter** | 聚合50+模型，方便切换，可设每日上限 |
 
-## 📚 使用示例
+### ❌ 不推荐
+
+| 模型 | 原因 |
+|------|------|
+| Claude | 政策严，易封号，不推荐接入第三方 |
+
+## 💡 使用示例
 
 ```python
 from poor_mans_router import PoorManRouter
@@ -62,30 +73,45 @@ from poor_mans_router import PoorManRouter
 router = PoorManRouter()
 
 # 1. 任务推荐
-result = router.get_best_for_task("写一篇科技文章")
-# → 推荐 Groq Llama 3.3 70B（剩余 1440 daily）
+result = router.get_best_for_task("写Python代码")
+# → 推荐 DeepSeek V3.2（性价比最高）
 
-# 2. 查看状态
+# 2. 免费优先
+result = router.get_best_for_task("简单问答")
+# → 推荐 Groq Llama 3.3 70B（每日1440次免费）
+
+# 3. 查看状态
 status = router.get_status()
 for s in status:
     if s['available']:
         print(f"{s['provider']} {s['name']}: {s['percent']:.0f}%")
-
-# 3. 记录使用
-router.record_usage("groq-llama-3.3-70b", tokens=100)
 ```
 
-## 🎯 适用人群
+## 📚 模型选择指南
 
-- ✅ 初学者（不想花太多钱）
-- ✅ 小用量用户（每天几到几十次调用）
-- ✅ 学生（学习和实验）
-- ✅ 开发者（快速原型）
+### 按场景
 
-## ❌ 不适用
+| 场景 | 推荐 |
+|------|------|
+| 编程开发 | DeepSeek V3.2 / GLM-4.7 |
+| 中文对话 | Kimi K2.5 / GLM-4.7 |
+| 省钱优先 | Groq (每日1440次免费) |
+| 快速原型 | OpenCode Zen (有免费额度) |
 
-- ❌ 日均调用超过1000次（建议用付费API）
-- ❌ 生产环境（建议用稳定付费服务）
+### 按成本
+
+| 成本 | 推荐方案 |
+|------|---------|
+| 完全免费 | Groq (1440次/天) |
+| 低成本 | DeepSeek V3.2 (按量付费) |
+| 包月 | Kimi K2.5 / GLM-4.7 CodingPlan |
+
+## ⚠️ 注意事项
+
+1. **按量付费建议设置上限** - 避免意外超支
+2. **Claude不推荐** - 政策严格，易封号
+3. **DeepSeek V3.2** - 性价比最高，但需要付费
+4. **OpenRouter** - 方便切换，建议设置每日限额
 
 ## 📂 项目结构
 
@@ -95,7 +121,7 @@ poor-mans-router/
 ├── README.md             # 本文件
 ├── poor_mans_router.py   # 核心代码
 ├── setup.py              # pip安装配置
-└── examples.py           # 使用示例
+└── examples.py          # 使用示例
 ```
 
 ## 🤝 贡献

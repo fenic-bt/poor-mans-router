@@ -48,8 +48,51 @@ class ModelInfo:
 
 
 # 每日免费额度模型数据库（2026年4月）
+# 参考：唐斩AI编程系列指南
 FREE_MODELS = {
     # ===== 文本模型 =====
+    # --- 性价比之选 ---
+    "deepseek-v3.2": ModelInfo(
+        name="DeepSeek V3.2",
+        provider="DeepSeek",
+        api_type="chat",
+        quota_type="api",
+        quota_limit=0,  # 按量付费，但性价比最高
+        requires_proxy=False,
+        strengths=["性价比最高", "编程能力强", "数理逻辑好"],
+        weaknesses=["需要付费"]
+    ),
+    "glm-4.7": ModelInfo(
+        name="GLM-4.7",
+        provider="智谱AI",
+        api_type="chat",
+        quota_type="coding-plan",
+        quota_limit=0,
+        requires_proxy=False,
+        strengths=["编程能力强", "数理逻辑好", "中文优化"],
+        weaknesses=["需要订阅"]
+    ),
+    "kimi-k2.5": ModelInfo(
+        name="Kimi K2.5",
+        provider="Kimi",
+        api_type="chat",
+        quota_type="coding-plan",
+        quota_limit=0,
+        requires_proxy=False,
+        strengths=["便宜够用", "官方支持", "网页端会员"],
+        weaknesses=["需要订阅"]
+    ),
+    "minimax-2.1": ModelInfo(
+        name="MiniMax 2.1",
+        provider="MiniMax",
+        api_type="chat",
+        quota_type="coding-plan",
+        quota_limit=0,
+        requires_proxy=False,
+        strengths=["能力强", "官方支持"],
+        weaknesses=["需要订阅"]
+    ),
+    # --- 免费额度 ---
     "groq-llama-3.3-70b": ModelInfo(
         name="Llama 3.3 70B",
         provider="Groq",
@@ -57,8 +100,8 @@ FREE_MODELS = {
         quota_type="daily",
         quota_limit=1440,  # 每天1440次请求
         requires_proxy=False,
-        strengths=["推理", "代码", "通用"],
-        weaknesses=["中文"]
+        strengths=["免费额度多", "速度快", "代码强"],
+        weaknesses=["中文一般"]
     ),
     "groq-mixtral-8x7b": ModelInfo(
         name="Mixtral 8x7B",
@@ -67,8 +110,8 @@ FREE_MODELS = {
         quota_type="daily",
         quota_limit=1440,
         requires_proxy=False,
-        strengths=["推理", "代码"],
-        weaknesses=["中文"]
+        strengths=["免费额度多", "速度快"],
+        weaknesses=["中文一般"]
     ),
     "groq-gemma2-9b": ModelInfo(
         name="Gemma 2 9B",
@@ -77,9 +120,30 @@ FREE_MODELS = {
         quota_type="daily",
         quota_limit=1440,
         requires_proxy=False,
-        strengths=["轻量", "快速"],
-        weaknesses=["复杂任务"]
+        strengths=["轻量快速", "免费额度多"],
+        weaknesses=["复杂任务一般"]
     ),
+    "nvidia-nim": ModelInfo(
+        name="NVIDIA NIM",
+        provider="NVIDIA",
+        api_type="chat",
+        quota_type="daily",
+        quota_limit=999999,  # 无限但限速40rpm
+        requires_proxy=False,
+        strengths=["额度无限", "注册免费"],
+        weaknesses=["限速40rpm", "需配置"]
+    ),
+    "opencode-zen": ModelInfo(
+        name="OpenCode Zen",
+        provider="OpenCode",
+        api_type="chat",
+        quota_type="free",
+        quota_limit=0,  # 有免费额度
+        requires_proxy=False,
+        strengths=["k2.5免费额度", "官方直接接入"],
+        weaknesses=["需要配置"]
+    ),
+    # --- 其他免费 ---
     "cohere-command-r-plus": ModelInfo(
         name="Command R+",
         provider="Cohere",
@@ -87,28 +151,18 @@ FREE_MODELS = {
         quota_type="monthly",
         quota_limit=1000,  # 每月1000次
         requires_proxy=False,
-        strengths=["RAG", "搜索", "中文较好"],
-        weaknesses=["创意写作"]
+        strengths=["RAG优化", "搜索强", "中文较好"],
+        weaknesses=["创意写作一般"]
     ),
     "google-gemini-pro": ModelInfo(
         name="Gemini Pro",
         provider="Google AI Studio",
         api_type="chat",
         quota_type="daily",
-        quota_limit=60,  # RPM限制，不是次数
+        quota_limit=60,  # RPM限制
         requires_proxy=False,
-        strengths=["推理", "多模态", "中文"],
+        strengths=["多模态", "中文好", "额度独立"],
         weaknesses=["需要申请"]
-    ),
-    "anthropic-claude-3.5": ModelInfo(
-        name="Claude 3.5 Sonnet",
-        provider="Anthropic",
-        api_type="chat",
-        quota_type="one-time",
-        quota_limit=5,  # $5额度
-        requires_proxy=True,
-        strengths=["编程", "推理", "分析"],
-        weaknesses=["有墙", "额度少"]
     ),
     "siliconflow-glm-4": ModelInfo(
         name="GLM-4",
@@ -117,18 +171,20 @@ FREE_MODELS = {
         quota_type="one-time",
         quota_limit=10,  # ¥10体验金
         requires_proxy=False,
-        strengths=["中文", "便宜"],
+        strengths=["便宜", "中文好"],
         weaknesses=["额度有限"]
     ),
-    "together-llama-3": ModelInfo(
-        name="Llama 3 70B",
-        provider="Together AI",
+
+    # --- 不推荐 ---
+    "anthropic-claude": ModelInfo(
+        name="Claude",
+        provider="Anthropic",
         api_type="chat",
-        quota_type="one-time",
-        quota_limit=5,  # $5额度
-        requires_proxy=False,
-        strengths=["代码", "推理"],
-        weaknesses=["额度有限"]
+        quota_type="subscription",
+        quota_limit=0,
+        requires_proxy=True,
+        strengths=["能力强"],
+        weaknesses=["❌政策严易封号", "不推荐接入第三方"]
     ),
 
     # ===== 图像模型 =====
@@ -142,16 +198,6 @@ FREE_MODELS = {
         strengths=["高质量", "逼真"],
         weaknesses=["需要申请"]
     ),
-    "dalle-3": ModelInfo(
-        name="DALL-E 3",
-        provider="OpenAI",
-        api_type="image",
-        quota_type="one-time",
-        quota_limit=5,
-        requires_proxy=True,
-        strengths=["艺术风格", "准确"],
-        weaknesses=["有墙"]
-    ),
     "google-imagen-3": ModelInfo(
         name="Imagen 3",
         provider="Google",
@@ -159,7 +205,7 @@ FREE_MODELS = {
         quota_type="daily",
         quota_limit=50,
         requires_proxy=False,
-        strengths=["高质量", "文字渲染"],
+        strengths=["高质量", "文字渲染好"],
         weaknesses=["新模型"]
     ),
 
@@ -169,9 +215,9 @@ FREE_MODELS = {
         provider="Runway",
         api_type="video",
         quota_type="free-tier",
-        quota_limit=125,  # 125 credits
+        quota_limit=125,
         requires_proxy=False,
-        strengths=["AI视频", "特效"],
+        strengths=["AI视频", "特效强"],
         weaknesses=["额度有限"]
     ),
     "pika-1": ModelInfo(
@@ -183,6 +229,18 @@ FREE_MODELS = {
         requires_proxy=False,
         strengths=["文字转视频", "易用"],
         weaknesses=["质量一般"]
+    ),
+
+    # ===== 聚合平台 =====
+    "openrouter": ModelInfo(
+        name="OpenRouter",
+        provider="OpenRouter",
+        api_type="aggregator",
+        quota_type="multi",
+        quota_limit=0,
+        requires_proxy=False,
+        strengths=["聚合50+模型", "方便切换", "可设每日上限"],
+        weaknesses=["需要付费", "第三方"]
     ),
 }
 
